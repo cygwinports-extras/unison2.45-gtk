@@ -1,0 +1,37 @@
+ORIG_PN=unison
+slot=${PV_MAJ_MIN}
+
+CATEGORY="Utils"
+SUMMARY="Unison File Synchronizer (version ${slot})"
+DESCRIPTION="Unison is a file-synchronization tool for Unix and Windows. It
+allows two replicas of a collection of files and directories to be stored on
+different hosts (or different disks on the same host), modified separately,
+and then brought up to date by propagating the changes in each replica to the
+other."
+HOMEPAGE="http://www.seas.upenn.edu/~bcpierce/unison/"
+SRC_URI="${HOMEPAGE}/download/releases/${ORIG_PN}-${PV}/${ORIG_PN}-${PV}.tar.gz"
+
+src_compile() {
+	lndirs
+	cd ${B}
+	cygmake -j1 CFLAGS=
+}
+
+src_install() {
+	local s=$(expr ${slot%.*} \* 1000 + ${slot##*.})
+
+	newbin ${B}/unison.exe unison-${slot}-gtk.exe
+	dodoc ${S}/{BUGS,CONTRIB,COPYING,NEWS,README,ROADMAP,TODO}*
+
+	make_desktop_entry unison-${slot}-gtk "Unison ${slot}" "" "Archiving;Utility"
+
+	dodir /etc/postinstall /etc/preremove
+	cat > ${D}/etc/postinstall/${PN}.sh <<-_EOF
+		/usr/sbin/update-alternatives --install /usr/bin/unison-gtk unison-gtk /usr/bin/unison-${slot}-gtk.exe ${s}
+
+		_EOF
+	cat > ${D}/etc/preremove/${PN}.sh <<-_EOF
+		/usr/sbin/update-alternatives --remove unison-gtk /usr/bin/unison-${slot}-gtk.exe
+
+		_EOF
+}
