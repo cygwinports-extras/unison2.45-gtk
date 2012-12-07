@@ -1,15 +1,16 @@
-ORIG_PN=unison
-slot=${PV_MAJ_MIN}
-
+NAME="unison2.45-gtk"
+VERSION=2.45.28
+RELEASE=1
 CATEGORY="Utils"
-SUMMARY="Unison File Synchronizer (version ${slot})"
+SUMMARY="Unison File Synchronizer (version 2.45)"
 DESCRIPTION="Unison is a file-synchronization tool for Unix and Windows. It
 allows two replicas of a collection of files and directories to be stored on
 different hosts (or different disks on the same host), modified separately,
 and then brought up to date by propagating the changes in each replica to the
 other."
 HOMEPAGE="http://www.seas.upenn.edu/~bcpierce/unison/"
-SRC_URI="${HOMEPAGE}/download/releases/${ORIG_PN}-${PV}/${ORIG_PN}-${PV}.tar.gz"
+SRC_URI="${HOMEPAGE}/download/releases/unison-${VERSION}/unison-${VERSION}.tar.gz"
+SRC_DIR="unison-${VERSION}"
 
 src_compile() {
 	lndirs
@@ -18,20 +19,20 @@ src_compile() {
 }
 
 src_install() {
-	local s=$(expr ${slot%.*} \* 1000 + ${slot##*.})
+	local s=$(expr ${PV_MAJ_MIN%.*} \* 1000 + ${PV_MAJ_MIN##*.})
 
-	newbin ${B}/unison.exe unison-${slot}-gtk.exe
+	newbin ${B}/unison.exe unison-${PV_MAJ_MIN}-gtk.exe
 	dodoc ${S}/{BUGS,CONTRIB,COPYING,NEWS,README,ROADMAP,TODO}*
 
-	make_desktop_entry unison-${slot}-gtk "Unison ${slot}" "" "Archiving;Utility"
+	make_desktop_entry unison-${PV_MAJ_MIN}-gtk "Unison ${PV_MAJ_MIN}" "" "Archiving;Utility"
 
 	dodir /etc/postinstall /etc/preremove
 	cat > ${D}/etc/postinstall/${PN}.sh <<-_EOF
-		/usr/sbin/update-alternatives --install /usr/bin/unison-gtk unison-gtk /usr/bin/unison-${slot}-gtk.exe ${s}
+		/usr/sbin/update-alternatives --install /usr/bin/unison-gtk unison-gtk /usr/bin/unison-${PV_MAJ_MIN}-gtk.exe ${s}
 
 		_EOF
 	cat > ${D}/etc/preremove/${PN}.sh <<-_EOF
-		/usr/sbin/update-alternatives --remove unison-gtk /usr/bin/unison-${slot}-gtk.exe
+		/usr/sbin/update-alternatives --remove unison-gtk /usr/bin/unison-${PV_MAJ_MIN}-gtk.exe
 
 		_EOF
 }
