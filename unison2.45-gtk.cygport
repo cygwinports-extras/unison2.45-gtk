@@ -1,6 +1,6 @@
 NAME="unison2.45-gtk"
 VERSION=2.45.28
-RELEASE=2
+RELEASE=3
 CATEGORY="Utils"
 SUMMARY="Unison File Synchronizer (version 2.45)"
 DESCRIPTION="Unison is a file-synchronization tool for Unix and Windows. It
@@ -12,6 +12,7 @@ HOMEPAGE="http://www.seas.upenn.edu/~bcpierce/unison/"
 SRC_URI="${HOMEPAGE}/download/releases/unison-${VERSION}/unison-${VERSION}.tar.gz"
 SRC_URI+=" http://pkgs.fedoraproject.org/cgit/unison240.git/plain/unison.png"
 SRC_DIR="unison-${VERSION}"
+PATCH_URI="http://pkgs.fedoraproject.org/cgit/rpms/unison240.git/plain/unison-2.40.128-ocaml-4.04.patch"
 
 src_compile() {
 	lndirs
